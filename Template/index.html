@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScamShield - Made by Kuldeep</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); flex: 1; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 25px; font-size: 15px; }
+        textarea { width: 100%; box-sizing: border-box; height: 200px; padding: 15px; border: 1px solid #bdc3c7; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 14px; resize: vertical; background-color: #fdfdfd; }
+        button { background-color: #3498db; color: white; border: none; padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 8px; margin-top: 15px; width: 100%; font-weight: bold; transition: 0.3s; }
+        button:hover { background-color: #2980b9; }
+        .result-box { margin-top: 30px; padding: 20px; border-radius: 8px; background: #fafafa; border-left: 8px solid #ccc; }
+        .score { font-size: 24px; font-weight: bold; text-align: center; margin-bottom: 15px; }
+        .red-flag { color: #e74c3c; font-weight: 600; margin-bottom: 5px; }
+        .safe-flag { color: #27ae60; font-weight: 600; margin-bottom: 5px; }
+        ul { padding-left: 20px; }
+        .meta-info { background: #ecf0f1; padding: 10px; border-radius: 5px; margin-bottom: 15px; word-wrap: break-word; }
+        
+        /* Footer Styling */
+        footer { text-align: center; padding: 20px; margin-top: 30px; background-color: #2c3e50; color: white; border-radius: 8px; }
+        footer a { color: #3498db; text-decoration: none; font-weight: bold; margin: 0 10px; }
+        footer a:hover { text-decoration: underline; color: #5dade2; }
+        .heart { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ ScamShield</h1>
+        <p class="subtitle">Paste your email raw headers below to detect spoofing and scams.</p>
+        
+        <form method="POST">
+            <textarea name="header_text" placeholder="Gmail se 'Show Original' copy karke yahan paste karein..." required>{{ raw_header if raw_header else '' }}</textarea>
+            <button type="submit">Analyze Email</button>
+        </form>
+
+        {% if analysis %}
+        <div class="result-box" style="border-left-color: {{ analysis.color }};">
+            <div class="score" style="color: {{ analysis.color }};">Risk Score: {{ analysis.score }}/100 ({{ analysis.risk_level }})</div>
+            
+            <div class="meta-info">
+                <p><strong>Sender:</strong> {{ analysis.sender }}</p>
+                <p><strong>Subject:</strong> {{ analysis.subject }}</p>
+            </div>
+            
+            <h3>🚩 Red Flags:</h3>
+            <ul>
+                {% for flag in analysis.red_flags %}
+                    <li class="red-flag">{{ flag }}</li>
+                {% else %}
+                    <li style="color: #7f8c8d;">None detected.</li>
+                {% endfor %}
+            </ul>
+
+            <h3>✅ Safe Indicators:</h3>
+            <ul>
+                {% for flag in analysis.safe_flags %}
+                    <li class="safe-flag">{{ flag }}</li>
+                {% else %}
+                    <li style="color: #7f8c8d;">None detected.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>Made with <span class="heart">❤️</span> by <strong>Kuldeep</strong></p>
+        <p>
+            <a href="https://github.com/aapka-username/scam-mail-detector" target="_blank">GitHub Repository</a> | 
+            <a href="https://aapka-live-link.app.github.dev" target="_blank">Live Demo</a>
+        </p>
+    </footer>
+</body>
+</html>
